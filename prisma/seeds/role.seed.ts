@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "node:crypto";
+import { PrismaClient } from "src/generated/prisma/client";
 
 type SeedRolesReturnType = {
   adminRole: { id: string };
