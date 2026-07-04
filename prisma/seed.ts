@@ -2,9 +2,9 @@
 import * as bcrypt from 'bcrypt';
 import { seedRoles } from './seeds/role.seed';
 import { seedPermissions } from './seeds/permissions.seed';
-import { PrismaClient } from 'generated/prisma/client';
 import { randomUUID } from 'node:crypto';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
+import { PrismaClient } from 'src/generated/prisma/client';
 
 const adapter = new PrismaBetterSqlite3({ url: process.env["DATABASE_URL"] });
 const prisma = new PrismaClient({ adapter });
