@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "module": "node20",
-    "moduleResolution": "nodenext",
+    "module": "Node20",
+    "moduleResolution": "NodeNext",
+    "target": "ES2023",
     "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -10,7 +11,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
