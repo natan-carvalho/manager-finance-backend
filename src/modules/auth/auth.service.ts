@@ -17,7 +17,10 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const user = await this.prismaService.user.findUnique({
       where: {
-        email: loginDto.email
+        email: loginDto.email,
+      },
+      include: {
+        roles: true
       }
     });
 
@@ -29,7 +32,7 @@ export class AuthService {
       throw new Error('Invalid Credentials');
     }
 
-    const token = await this.jwtService.signAsync({ name: user.name, email: user.email });
+    const token = await this.jwtService.signAsync({ name: user.name, email: user.email, roles: user.roles });
     return { access_token: token };
   }
 }
