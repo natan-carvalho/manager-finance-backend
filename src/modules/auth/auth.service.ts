@@ -32,7 +32,7 @@ export class AuthService {
       throw new Error('Invalid Credentials');
     }
 
-    const token = await this.jwtService.signAsync({ name: user.name, email: user.email, roles: user.roles });
+    const token = await this.jwtService.signAsync({ sub: user.id, name: user.name, email: user.email, roles: user.roles });
     return { access_token: token };
   }
 }

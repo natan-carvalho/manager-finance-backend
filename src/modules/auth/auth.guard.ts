@@ -1,11 +1,20 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
+import { PrismaService } from 'src/infrastructure/database/prisma.service';
 
+type PayloadType = {
+  name: string,
+  email: string,
+  sub: string,
+  roles: {
+    userId: string;
+    roleId: string;
+  }[]
+};
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) { }
+  constructor(private readonly jwtService: JwtService, private readonly prismaService: PrismaService) { }
 
   async canActivate(
     context: ExecutionContext,
@@ -17,8 +26,18 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = this.jwtService.verify<{ name: string, email: string }>(token, { algorithms: ['HS256'] });
+      const payload = this.jwtService.verify<PayloadType>(token, { algorithms: ['HS256'] });
 
+      const user = await this.prismaService.user.findUnique({
+        where: {
+          id: payload.sub
+        }
+      })
+
+      if (!user) {
+        throw new UnauthorizedException("User not found");
+      }
+      request.user = user;
       return true;
     } catch (error) {
       console.error('Token verification failed:', error);
