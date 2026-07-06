@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
 import { randomUUID } from 'node:crypto';
+import { hashSync } from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -11,24 +12,40 @@ export class UsersService {
     return await this.prisma.user.create({
       data: {
         id: randomUUID(),
-        ...createUserDto
+        ...createUserDto,
+        password: hashSync(createUserDto.password, 10)
       }
     });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.prisma.user.findMany();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    return this.prisma.user.findFirst({
+      where: {
+        id
+      }
+    });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        ...updateUserDto
+      }
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    return this.prisma.user.delete({
+      where: {
+        id
+      }
+    });
   }
 }
