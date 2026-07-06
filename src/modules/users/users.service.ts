@@ -5,6 +5,7 @@ import { PrismaService } from 'src/infrastructure/database/prisma.service';
 import { randomUUID } from 'node:crypto';
 import { hashSync } from 'bcrypt'
 
+
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) { }
@@ -13,7 +14,7 @@ export class UsersService {
       data: {
         id: randomUUID(),
         ...createUserDto,
-        password: hashSync(createUserDto.password, 10)
+        password: hashSync(createUserDto.password, 12)
       }
     });
   }
